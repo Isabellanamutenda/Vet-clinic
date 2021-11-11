@@ -9,3 +9,4 @@ CREATE TABLE animals (
     neutred BOOLEAN,
     weight_kg DECIMAL
 );
+
