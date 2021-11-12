@@ -1,26 +1,61 @@
 /* Database schema to keep the structure of entire database. */
 
-CREATE TABLE owners (
-    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    full_name VARCHAR(50),
-    age INT
-);
+CREATE DATABASE vet_clinic;
 
-CREATE TABLE species (
-    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(50)
+CREATE TABLE animals(
+  id INT PRIMARY KEY NOT NULL,
+  name TEXT NOT NULL,
+  date_of_birth DATE,
+  escape_attempts INT,
+  neutered BOOLEAN,
+  weight_kg DECIMAL
 );
+ALTER TABLE animals 
+  Add species TEXT;
 
-CREATE TABLE animals (
-    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(50),
-    species VARCHAR(50),
-    date_of_birth DATE,
-    escape_attempts INT,
-    neutred BOOLEAN,
-    weight_kg DECIMAL
-);
+CREATE TABLE owners(
+  id SERIAL PRIMARY KEY,
+  full_name TEXT,
+  age INT 
+)
 
+CREATE TABLE species(
+  id SERIAL PRIMARY KEY,
+  name TEXT
+)
+
+ALTER TABLE animals DROP COLUMN id;
+ALTER TABLE animals ADD COLUMN id SERIAL PRIMARY KEY;
 ALTER TABLE animals DROP COLUMN species;
-ALTER TABLE animals ADD COLUMN species_id INT REFERENCES species(id);
-ALTER TABLE animals ADD COLUMN owner_id INT REFERENCES owners(id);
+
+ALTER TABLE animals ADD COLUMN species_id INT,
+  ADD CONSTRAINT fk_species
+  FOREIGN KEY (species_id)
+  REFERENCES species (id);
+
+ALTER TABLE animals ADD COLUMN owner_id INT,
+  ADD CONSTRAINT fk_owners
+  FOREIGN KEY (owner_id)
+  REFERENCES owners (id);
+
+CREATE TABLE vets(
+  id SERIAL PRIMARY KEY,
+  name TEXT,
+  age INT,
+  date_of_graduation date
+);
+
+CREATE TABLE specializations (
+  species_id INT,
+  vets_id INT,
+  CONSTRAINT fk_species FOREIGN KEY(species_id) REFERENCES species(id) ON DELETE CASCADE,
+  CONSTRAINT fk_vets FOREIGN KEY(vets_id) REFERENCES vets(id) ON DELETE CASCADE
+);
+
+CREATE TABLE visits (
+  animals_id INT,
+  vets_id INT,
+  date DATE,
+  CONSTRAINT fk_animals FOREIGN KEY(animals_id) REFERENCES animals(id),
+  CONSTRAINT fk_vets FOREIGN KEY(vets_id) REFERENCES vets(id)
+);
