@@ -1,35 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@Isabellanamutenda 
-Kossi-stack
-/
-Vet-Clinic-Database
-Public
-generated from microverseinc/curriculum-template-databases
-1
-1
-0
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Vet-Clinic-Database/data.sql
-@Kossi-stack
-Kossi-stack Insert data for vets specializations
-Latest commit 73ff06f 7 days ago
- History
- 1 contributor
-38 lines (30 sloc)  3.1 KB
-  
 /* Populate database with sample data. */
 
 INSERT INTO animals (id,name,date_of_birth,escape_attempts,neutered,weight_kg) VALUES (1, 'Agumon', '2020-02-03', 0, TRUE, 10.23);
