@@ -33,6 +33,7 @@ CREATE TABLE vets(
   PRIMARY KEY(id)
 );
 
+
 CREATE TABLE specializations(
   species_id  INT,
   vets_id     INT,
