@@ -1,102 +1,11 @@
-/* Populate database with sample data. */
+INSERT INTO animals (name) VALUES ('Agumon'), ('Gabumon'), ('Pikachu'), ('Devimon'), ('Charmander'), ('Plantmon'), ('Squirtle'), ('Angemon'), ('Boarmon'), ('Blossom');
 
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Agumon', NULL, '2020-02-03', 0, TRUE, 10.23);
-
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Gabumon', NULL, '2018-11-15', 2, TRUE, 8);
-
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Pikachu', NULL, '2021-01-07', 1, FALSE, 15.04);
+INSERT INTO vets (name) VALUES ('William Tatcher'), ('Maisy Smith'), ('Stephanie Mendez'), ('Jack Harkness');
 
 
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Devimon', NULL, '2017-05-12', 5, TRUE, 11);
+-- This will add 3.594.280 visits considering you have 10 animals, 4 vets, and it will use around ~87.000 timestamps (~4min approx.)
+INSERT INTO visits (animal_id, vet_id, date_of_visit) SELECT * FROM (SELECT id FROM animals) animal_ids, (SELECT id FROM vets) vets_ids, generate_series('1980-01-01'::timestamp, '2021-01-01', '4 hours') visit_timestamp;
 
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Charmander', NULL, '2020-01-08', 0, FALSE, -11);
+-- This will add 2.500.000 owners with full_name = 'Owner <X>' and email = 'owner_<X>@email.com' (~2min approx.)
+insert into owners (full_name, email) select 'Owner ' || generate_series(1,2500000), 'owner_' || generate_series(1,2500000) || '@mail.com';
 
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Plantmon', NULL, '2022-11-15', 2, TRUE, -5.7);
-
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Squirtle', NULL, '1993-04-02', 3, FALSE, -12.13);
-
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Angemon', NULL, '2005-06-12', 1, TRUE, -45);
-
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Boarmon', NULL, '2005-06-07', 7, TRUE, 20.4);
-
-INSERT INTO animals (
-  name,
-  species,
-  date_of_birth,
-  escape_attempts,
-  neutred,
-  weight_kg
-)
-VALUES ('Blossom', NULL, '1998-10-13', 3, TRUE, 17);
