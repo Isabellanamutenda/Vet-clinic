@@ -1,60 +1,70 @@
-CREATE TABLE owners(
-  id INT GENERATED ALWAYS AS IDENTITY,
-  full_name VARCHAR(20),
-  age INT,
-  PRIMARY KEY(id)
-);
+/* Database schema to keep the structure of entire database. */
 
-CREATE TABLE species(
-  id INT GENERATED ALWAYS AS IDENTITY,
-  name VARCHAR(20),
-  PRIMARY KEY(id)
-);
+CREATE DATABASE vet_clinic;
 
 CREATE TABLE animals(
-  species_id INT,
-  owner_id INT,
-  id INT GENERATED ALWAYS AS IDENTITY,
-  name VARCHAR(20),
+  id INT PRIMARY KEY NOT NULL,
+  name TEXT NOT NULL,
   date_of_birth DATE,
   escape_attempts INT,
   neutered BOOLEAN,
-  weight_kg DECIMAL,
-  FOREIGN KEY (species_id) REFERENCES species (id),
-  FOREIGN KEY (owner_id) REFERENCES owners (id),
-  PRIMARY KEY(id)
+  weight_kg DECIMAL
 );
+
+ALTER TABLE animals 
+  Add species TEXT;
+
+CREATE TABLE owners(
+  id SERIAL PRIMARY KEY,
+  full_name TEXT,
+  age INT 
+)
+
+CREATE TABLE species(
+  id SERIAL PRIMARY KEY,
+  name TEXT
+)
+
+ALTER TABLE animals DROP COLUMN id;
+ALTER TABLE animals ADD COLUMN id SERIAL PRIMARY KEY;
+ALTER TABLE animals DROP COLUMN species;
+
+ALTER TABLE animals ADD COLUMN species_id INT,
+  ADD CONSTRAINT fk_species
+  FOREIGN KEY (species_id)
+  REFERENCES species (id);
+
+ALTER TABLE animals ADD COLUMN owner_id INT,
+  ADD CONSTRAINT fk_owners
+  FOREIGN KEY (owner_id)
+  REFERENCES owners (id);
 
 CREATE TABLE vets(
-  id INT GENERATED ALWAYS AS IDENTITY,
-  name VARCHAR(20),
+  id SERIAL PRIMARY KEY,
+  name TEXT,
   age INT,
-  date_of_graduation DATE,
-  PRIMARY KEY(id)
+  date_of_graduation date
 );
 
-CREATE TABLE specializations(
-  species_id  INT,
-  vets_id     INT,
-  FOREIGN KEY (species_id) REFERENCES species (id),
-  FOREIGN KEY (vets_id) REFERENCES vets (id),
-  PRIMARY KEY (species_id, vets_id)
+CREATE TABLE specializations (
+  id SERIAL PRIMARY KEY,
+  species_id INT,
+  vets_id INT,
+  CONSTRAINT fk_species FOREIGN KEY(species_id) REFERENCES species(id) ON DELETE CASCADE,
+  CONSTRAINT fk_vets FOREIGN KEY(vets_id) REFERENCES vets(id) ON DELETE CASCADE
 );
 
-CREATE TABLE visits(
-  animal_id  INT,
-  vet_id     INT,
-  date_of_visit DATE,
-  id INT GENERATED ALWAYS AS IDENTITY,
-  FOREIGN KEY (animal_id) REFERENCES animals (id),
-  FOREIGN KEY (vet_id) REFERENCES vets (id),
-  PRIMARY KEY (id)
+CREATE TABLE visits (
+  id SERIAL PRIMARY KEY,
+  animals_id INT,
+  vets_id INT,
+  date DATE,
+  CONSTRAINT fk_animals FOREIGN KEY(animals_id) REFERENCES animals(id),
+  CONSTRAINT fk_vets FOREIGN KEY(vets_id) REFERENCES vets(id)
 );
 
 ALTER TABLE owners ADD COLUMN email VARCHAR(120);
 
-CREATE INDEX animal_id_idx ON visits (animal_id);
-
-CREATE INDEX vet_id_idx ON visits (vet_id);
-
-CREATE INDEX owners_email_idx ON owners (email);
+CREATE INDEX animals_id_index ON visits(animals_id);
+CREATE INDEX vets_id_index ON visits(vets_id, animals_id, date);
+CREATE INDEX email_index ON owners(email ASC);
