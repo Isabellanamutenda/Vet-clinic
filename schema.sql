@@ -46,13 +46,6 @@ CREATE TABLE vets(
   date_of_graduation date
 );
 
-CREATE TABLE specializations (
-  id SERIAL PRIMARY KEY,
-  species_id INT,
-  vets_id INT,
-  CONSTRAINT fk_species FOREIGN KEY(species_id) REFERENCES species(id) ON DELETE CASCADE,
-  CONSTRAINT fk_vets FOREIGN KEY(vets_id) REFERENCES vets(id) ON DELETE CASCADE
-);
 
 CREATE TABLE visits (
   id SERIAL PRIMARY KEY,

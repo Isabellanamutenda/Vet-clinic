@@ -9,6 +9,7 @@ SELECT name FROM animals WHERE neutered IS TRUE;
 SELECT name FROM animals WHERE name NOT IN ('Gabumon');
 SELECT name FROM animals WHERE weight_kg BETWEEN 10.4 AND 17.3;
 
+
 BEGIN;
 UPDATE animals SET species='unspecified';
 SELECT * FROM animals;
